@@ -1,35 +1,35 @@
-name: Deploy Node.js App to EC2
+name: Deploy to EC2
 
 on:
   push:
     branches:
-      - main  # Trigger the workflow on push to the 'main' branch
+      - main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2  # Check out your repository code
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Upload code to EC2
-      uses: appleboy/scp-action@v0.1.4
-      with:
-        host: ${{ secrets.HOST }}  # The EC2 public IP (GitHub secret)
-        username: ubuntu  # The username for the EC2 instance (default for Ubuntu)
-        key: ${{ secrets.SSH_KEY }}  # The SSH private key for authentication (GitHub secret)
-        source: "."  # The source directory (your project files)
-        target: "/home/ubuntu/CC_project"  # The target directory on your EC2 instance
+      - name: Upload code to EC2
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ secrets.HOST }}
+          username: ubuntu
+          key: ${{ secrets.SSH_KEY }}
+          source: "."
+          target: "/home/ubuntu/NodeApp"
 
-    - name: SSH to EC2 and restart app
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.HOST }}  # The EC2 public IP
-        username: ubuntu  # The username for the EC2 instance
-        key: ${{ secrets.SSH_KEY }}  # The SSH private key for authentication
-        script: |
-          cd /home/ubuntu/CC_project  # Go to the project directory
-          npm install  # Install dependencies
-          pkill node || true  # Kill any running Node.js processes (avoid conflicts)
-          nohup node app.js &  # Run the app in the background
+      - name: SSH to EC2 and restart app
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ubuntu
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd /home/ubuntu/NodeApp
+            npm install
+            pkill node || true
+            nohup npm start &
