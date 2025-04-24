@@ -32,4 +32,4 @@ jobs:
             cd /home/ubuntu/NodeApp
             npm install
             pkill node || true
-            nohup npm start &
+            nohup npm start -- host&
