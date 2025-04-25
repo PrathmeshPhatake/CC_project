@@ -3,7 +3,7 @@ const app = express();
 const PORT = 3000;
 
 app.get('/', (req, res) => {
-    res.send('this is chanegs after  pushing code in main branch   in Hello World from Node.js!');
+    res.send('this is chanegs after  pushing code in main branch   ');
 });
 
 app.listen(PORT, () => {
